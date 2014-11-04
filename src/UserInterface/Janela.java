@@ -40,6 +40,8 @@ import javax.swing.KeyStroke;
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 
 import Figuras.Figura;
+import Figuras.Fim;
+import Figuras.Inicio;
 import Figuras.Linha;
 import Figuras.Oval;
 import Figuras.Poligono;
@@ -90,6 +92,7 @@ public class Janela extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 	}
 
@@ -405,32 +408,35 @@ public class Janela extends JFrame {
 					JOptionPane.showMessageDialog(Janela.this,
 							"Você deve criar um novo fluxograma!");
 				} else {
+					String retorno = null;
 					// Cria as figuras de acordo com o botão selecionado e as
 					// adiciona no fluxograma
 					if (e.getSource().equals(painelFluxograma)
 							&& e.getButton() == MouseEvent.BUTTON1) {
 						if (btnInicio.isSelected()) {
-							projetoAtual.getFluxogramaAtual(
+							if(!projetoAtual.getFluxogramaAtual(
 									listaFluxogramas.getSelectedIndex())
-									.adicionaFigura(
-											new Oval(e.getX(), e.getY(),
-													"Inicio"));
+									.adicionaOvalComRegra(
+											new Inicio(e.getX(), e.getY(),
+													"Inicio"))){
+								JOptionPane.showMessageDialog(Janela.this, "Este fluxograma já possui início!","Erro",JOptionPane.ERROR_MESSAGE);
+							}
 						} else if (btnFim.isSelected()) {
-							projetoAtual
+							retorno = projetoAtual
 									.getFluxogramaAtual(
 											listaFluxogramas.getSelectedIndex())
-									.adicionaFigura(
-											new Oval(e.getX(), e.getY(), "Fim"));
+									.verificaSePodeAdicionar(
+											new Fim(e.getX(), e.getY(), "Fim"));
 						} else if (btnProcessamento.isSelected()) {
-							projetoAtual.getFluxogramaAtual(
+							retorno = projetoAtual.getFluxogramaAtual(
 									listaFluxogramas.getSelectedIndex())
-									.adicionaFigura(
+									.verificaSePodeAdicionar(
 											new Retangulo(e.getX(), e.getY(),
 													nomeProcesso));
 						} else if (btnDecisao.isSelected()) {
-							projetoAtual.getFluxogramaAtual(
+							retorno = projetoAtual.getFluxogramaAtual(
 									listaFluxogramas.getSelectedIndex())
-									.adicionaFigura(
+									.verificaSePodeAdicionar(
 											new Poligono(e.getX(), e.getY(),
 													nomeProcesso));
 						} else if (btnLinhaDeFluxo.isSelected()) {
@@ -440,7 +446,7 @@ public class Janela extends JFrame {
 							projetoAtual
 									.getFluxogramaAtual(
 											listaFluxogramas.getSelectedIndex())
-									.getUltimaFigura().setLinhaProx(linha);
+									.getUltimaNaoLinha().setLinhaProx(linha);
 							projetoAtual.getFluxogramaAtual(
 									listaFluxogramas.getSelectedIndex())
 									.adicionaFigura(linha);
@@ -454,15 +460,16 @@ public class Janela extends JFrame {
 															.getSelectedIndex())
 											.getFiguras().size() - 2));
 						} else if (btnSubrotina.isSelected()) {
-							projetoAtual.getFluxogramaAtual(
+							retorno = projetoAtual.getFluxogramaAtual(
 									listaFluxogramas.getSelectedIndex())
-									.adicionaFigura(
+									.verificaSePodeAdicionar(
 											new SubRotina(e.getX(), e.getY(),
 													nomeProcesso));
 						} else if (btnSelecionar.isSelected()) {
 							painelFluxograma
 									.verificaSelecao(e.getX(), e.getY());
 						}
+						if(retorno != null) JOptionPane.showMessageDialog(Janela.this, retorno, "Erro", JOptionPane.ERROR_MESSAGE);
 						painelFluxograma.repaint();
 					}
 				}

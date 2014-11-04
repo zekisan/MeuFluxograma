@@ -49,7 +49,6 @@ public class PainelFluxograma extends JPanel {
 	}
 
 	public void limpaFiguras() {
-		// figuras.clear();
 		if (fluxogramaAtual != null) {
 			fluxogramaAtual.getFiguras().clear();
 		}
