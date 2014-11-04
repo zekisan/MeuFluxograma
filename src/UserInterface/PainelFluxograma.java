@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import Figuras.Figura;
+import Figuras.Inicio;
 import Figuras.Linha;
 import Projeto.Fluxograma;
 import Projeto.Projeto;
@@ -99,10 +100,15 @@ public class PainelFluxograma extends JPanel {
 
 	public void removeFigura() {
 		if (this.getSelecionado() != null) {
-			fluxogramaAtual.getFiguras()
-					.remove(fluxogramaAtual.getFiguras().indexOf(
-							this.getSelecionado()) - 1);
-			fluxogramaAtual.getFiguras().remove(this.getSelecionado());
+			if (this.getSelecionado().getClass().equals(Inicio.class)) {
+				fluxogramaAtual.getFiguras().remove(this.getSelecionado());
+				fluxogramaAtual.setTemInicio(false);
+			} else {
+				fluxogramaAtual.getFiguras().remove(
+						fluxogramaAtual.getFiguras().indexOf(
+								this.getSelecionado()) - 1);
+				fluxogramaAtual.getFiguras().remove(this.getSelecionado());
+			}
 			this.repaint();
 		}
 	}
@@ -111,15 +117,15 @@ public class PainelFluxograma extends JPanel {
 	public void paintComponent(Graphics g) {
 		limparTela(g);
 
-		if (fluxogramaAtual != null) {
+		if (fluxogramaAtual != null && fluxogramaAtual.getFiguras() != null) {
 			// Desenha o nome do fluxograma atual
 			g.drawString("Fluxograma: " + fluxogramaAtual.getNomeFluxograma(),
 					8, 20);
-			if (fluxogramaAtual.getFiguras() != null) {
-				for (Figura f : fluxogramaAtual.getFiguras()) {
-					f.desenha(g);
-				}
+			for (Figura f : fluxogramaAtual.getFiguras()) {
+				f.desenha(g);
 			}
+		} else {
+			g.drawString("Fluxograma: ", 8, 20);
 		}
 	}
 }

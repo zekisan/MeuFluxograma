@@ -57,7 +57,7 @@ public class Janela extends JFrame {
 	private JMenu menuArquivo, subMenuArquivo, menuFerramentas;
 	private JMenuItem itemSalvar, itemSalvarComo, itemAbrir, itemNovoProjeto,
 			itemNovoFluxograma, itemExportarImagem, itemExcluir,
-			itemVerificaConsistencia, itemFecharProjeto, itemFechar;
+			itemVerificaConsistencia, itemFechar;
 	private JPopupMenu menuPopup;
 
 	// Toolbar e botoes
@@ -161,9 +161,6 @@ public class Janela extends JFrame {
 		itemAbrir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				KeyEvent.CTRL_MASK));
 		
-		itemFecharProjeto = new JMenuItem("Fechar Projeto");
-		itemFecharProjeto.addActionListener(new tratadorMenu());
-		
 		itemFechar = new JMenuItem("Fechar");
 		itemFechar.addActionListener(new tratadorMenu());
 
@@ -194,7 +191,6 @@ public class Janela extends JFrame {
 		menuArquivo.add(itemAbrir);
 		menuArquivo.add(itemSalvar);
 		menuArquivo.add(itemSalvarComo);
-		menuArquivo.add(itemFecharProjeto);
 		menuArquivo.addSeparator();
 		menuArquivo.add(itemFechar);
 		this.setJMenuBar(menuBar);
@@ -346,8 +342,6 @@ public class Janela extends JFrame {
 								"Erro ao ler do arquivo");
 					}
 				}
-			}else if(e.getSource().equals(itemFecharProjeto)){
-				
 			}else if(e.getSource().equals(itemFechar)){
 				System.exit(0);
 			}
