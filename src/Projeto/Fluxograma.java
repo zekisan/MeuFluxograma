@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import Figuras.Figura;
+import Figuras.Inicio;
 import Figuras.Linha;
 import Figuras.Oval;
 
@@ -82,7 +83,9 @@ public class Fluxograma implements Serializable{
 	}
 	
 	public String verificaSePodeAdicionar(Figura figura){
-		if(figura.getClass().equals(getUltimaFigura().getClass())){
+		if(!figura.getClass().equals(Inicio.class) && temInicio == false){
+			return "O fluxograma deve começar com o processo 'Inicio'!";
+		}else if(figura.getClass().equals(getUltimaFigura().getClass())){
 			return "Processo repetido.";
 		}
 		else if(!(getUltimaFigura().getClass().equals(Linha.class))){
