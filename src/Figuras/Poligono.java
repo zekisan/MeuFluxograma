@@ -15,23 +15,23 @@ public class Poligono extends Figura {
 		int alt = Math.abs(yIni - yFim);
 
 		int xpoint[] = new int[4];
-		xpoint[0] = xIni;
-		xpoint[1] = xIni + Math.abs(larg / 2);
-		xpoint[2] = xIni + larg;
-		xpoint[3] = xIni + Math.abs(larg / 2);
+		xpoint[0] = (xIni <= xFim) ? xIni : xFim;
+		xpoint[1] = (xIni <= xFim) ? (xIni + Math.abs(larg / 2)) : (xFim + Math.abs(larg / 2));
+		xpoint[2] = (xIni <= xFim) ? (xIni + larg) : (xFim + larg);
+		xpoint[3] = (xIni <= xFim) ? (xIni + Math.abs(larg / 2)) : (xFim + Math.abs(larg / 2));
 
 		int ypoint[] = new int[4];
 		ypoint[0] = yIni + Math.abs(alt / 2);
 		ypoint[1] = yIni;
 		ypoint[2] = yIni + Math.abs(alt / 2);
 		ypoint[3] = yIni + alt;
-
+		
 		g.drawPolygon(xpoint, ypoint, 4);
 		
 		FontMetrics fm = g.getFontMetrics();
-        int xTexto = (larg - fm.stringWidth(texto)) / 2;
-        int yTexto = (fm.getAscent() + (alt - (fm.getAscent() + fm.getDescent())) / 2);
-        g.drawString(texto, xIni + xTexto, yIni + yTexto);
+        int xTexto = (xIni <= xFim) ? (((larg - fm.stringWidth(texto)) / 2) + xIni) : (((larg - fm.stringWidth(texto)) / 2) + xFim);
+        int yTexto = (fm.getAscent() + (alt - (fm.getAscent() + fm.getDescent())) / 2) + yIni;
+        g.drawString(texto, xTexto, yTexto);
 		
 		if (this.estaSelecionado()) {
             g.drawOval(xpoint[0],ypoint[0],4,4);
