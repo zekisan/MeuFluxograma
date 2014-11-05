@@ -22,14 +22,19 @@ public class SubRotina extends Figura{
         g.drawRect(x, y, larg, alt);
         
         FontMetrics fm = g.getFontMetrics();
-        int xTexto = (larg - fm.stringWidth(texto)) / 2;
-        int yTexto = (fm.getAscent() + (alt - (fm.getAscent() + fm.getDescent())) / 2);
-        g.drawString(texto, xIni + xTexto, yIni + yTexto);
+        int xTexto = (xIni <= xFim) ? (((larg - fm.stringWidth(texto)) / 2) + xIni) : (((larg - fm.stringWidth(texto)) / 2) + xFim);
+        int yTexto = (fm.getAscent() + (alt - (fm.getAscent() + fm.getDescent())) / 2) + yIni;
+        g.drawString(texto, xTexto, yTexto);
         
         int xDividido = Math.abs( larg / 10 );
         
-        g.drawLine(xIni + xDividido, yIni, xIni + xDividido, yFim);
-        g.drawLine(xFim - xDividido, yIni, xFim - xDividido, yFim);
+        if(xIni <= xFim){
+	        g.drawLine(xIni + xDividido, yIni, xIni + xDividido, yFim);
+	        g.drawLine(xFim - xDividido, yIni, xFim - xDividido, yFim);
+        }else{
+        	g.drawLine(xIni - xDividido, yIni, xIni - xDividido, yFim);
+	        g.drawLine(xFim + xDividido, yIni, xFim + xDividido, yFim);
+        }
         
         if (this.estaSelecionado()) {
             g.drawOval(x-2,y-2,4,4);
