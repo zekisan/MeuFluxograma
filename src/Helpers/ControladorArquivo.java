@@ -51,8 +51,8 @@ public class ControladorArquivo {
 			FileInputStream fis = new FileInputStream(file);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			janela.projetoAtual = (Projeto) ois.readObject();
-			janela.alimentaListaFluxogramas(janela.projetoAtual.getFluxogramas());
-			janela.defineTitulo(janela.projetoAtual.getNomeProjeto());
+			HelperFluxograma.alimentaListaFluxogramas(janela, janela.projetoAtual.getFluxogramas());
+			HelperFluxograma.defineTitulo(janela, janela.projetoAtual.getNomeProjeto());
 			ois.close();
 			fis.close();
 		} catch (Exception e) {

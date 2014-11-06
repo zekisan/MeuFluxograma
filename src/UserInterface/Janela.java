@@ -48,6 +48,7 @@ import Figuras.Poligono;
 import Figuras.Retangulo;
 import Figuras.SubRotina;
 import Helpers.ControladorArquivo;
+import Helpers.HelperFluxograma;
 import Projeto.Fluxograma;
 import Projeto.Projeto;
 
@@ -72,17 +73,16 @@ public class Janela extends JFrame {
 	private PainelFluxograma painelFluxograma;
 
 	// Lista
-	private JList<String> listaFluxogramas;
+	public JList<String> listaFluxogramas;
 	private JScrollPane scrollPane;
-
+	public DefaultListModel<String> lP = new DefaultListModel<String>();
+	
 	// Projeto
 	public Projeto projetoAtual;
 
 	private final int SALVAR = 0;
 	private final int SALVARCOMO = 1;
 	private String nomeProcesso = "";
-
-	private DefaultListModel<String> lP = new DefaultListModel<String>();
 
 	// Construtor
 	public Janela() {
@@ -237,7 +237,7 @@ public class Janela extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			nomeProcesso = getNomeProcesso();
+			nomeProcesso = HelperFluxograma.getNomeProcesso(Janela.this);
 		}
 
 	}
@@ -287,7 +287,7 @@ public class Janela extends JFrame {
 			if (e.getSource().equals(itemNovoProjeto)) {
 				projetoAtual = new Projeto(JOptionPane.showInputDialog(
 						Janela.this, "Digite o nome do projeto:"));
-				defineTitulo(projetoAtual.getNomeProjeto());
+				HelperFluxograma.defineTitulo(Janela.this, projetoAtual.getNomeProjeto());
 				painelFluxograma.limpaFiguras();
 				lP.clear();
 				listaFluxogramas.setModel(lP);
@@ -295,8 +295,8 @@ public class Janela extends JFrame {
 			// Cria novo fluxograma
 			else if (e.getSource().equals(itemNovoFluxograma)) {
 				if (projetoAtual != null) {
-					adicionaFluxograma();
-					habilitaFuncoesFluxograma();
+					HelperFluxograma.adicionaFluxograma(Janela.this, painelFluxograma);
+					HelperFluxograma.habilitaFuncoesFluxograma(itemExportarImagem, itemVerificaConsistencia);
 				} else {
 					JOptionPane.showMessageDialog(Janela.this,
 							"Crie um novo projeto!");
@@ -488,7 +488,7 @@ public class Janela extends JFrame {
 						// cria novo fluxograma para a subrotina criada
 						subRotina = (SubRotina) projetoAtual
 								.getUltimoFluxograma().getUltimaFigura();
-						adicionaFluxograma();
+						HelperFluxograma.adicionaFluxograma(Janela.this, painelFluxograma);
 						subRotina.setFluxogramaRelacionado(projetoAtual
 								.getUltimoFluxograma());
 						break;
@@ -535,41 +535,4 @@ public class Janela extends JFrame {
 			}
 		}
 	}// end MenuPopUp
-	
-	public void alimentaListaFluxogramas(ArrayList<Fluxograma> fluxogramas) {
-		for (Fluxograma f : fluxogramas) {
-			lP.addElement(f.getNomeFluxograma());
-		}
-		listaFluxogramas.setModel(lP);
-	}
-
-	public void defineTitulo(String titulo) {
-		Janela.this.setTitle(Janela.this.getTitle().substring(0, 13) + " - "
-				+ titulo);
-	}
-
-	private void adicionaFluxograma() {
-		projetoAtual.adicionaFluxograma(new Fluxograma(JOptionPane
-				.showInputDialog(Janela.this, "Digite o nome do fluxograma:")));
-		painelFluxograma.setFluxogramaAtual(projetoAtual.getUltimoFluxograma());
-		lP.addElement(projetoAtual.getUltimoFluxograma().getNomeFluxograma());
-		listaFluxogramas.setModel(lP);
-		listaFluxogramas
-				.setSelectedIndex(projetoAtual.getFluxogramas().size() - 1);
-	}
-
-	public String getNomeProcesso() {
-		return JOptionPane.showInputDialog(Janela.this,
-				"Digite o nome do processo:");
-	}
-	
-	public void habilitaFuncoesFluxograma(){
-		itemExportarImagem.setEnabled(true);
-		itemVerificaConsistencia.setEnabled(true);
-	}
-	
-	public void desabilitaFuncoesFluxograma(){
-		itemExportarImagem.setEnabled(false);
-		itemVerificaConsistencia.setEnabled(false);
-	}
 }
