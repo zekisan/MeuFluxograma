@@ -47,6 +47,7 @@ import Figuras.Oval;
 import Figuras.Poligono;
 import Figuras.Retangulo;
 import Figuras.SubRotina;
+import Helpers.ControladorArquivo;
 import Projeto.Fluxograma;
 import Projeto.Projeto;
 
@@ -75,7 +76,7 @@ public class Janela extends JFrame {
 	private JScrollPane scrollPane;
 
 	// Projeto
-	private Projeto projetoAtual;
+	public Projeto projetoAtual;
 
 	private final int SALVAR = 0;
 	private final int SALVARCOMO = 1;
@@ -309,7 +310,7 @@ public class Janela extends JFrame {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					try {
-						salvarDados(file, SALVARCOMO);
+						ControladorArquivo.salvarDados(file, SALVARCOMO, projetoAtual);
 					} catch (IOException ex) {
 						JOptionPane.showMessageDialog(Janela.this,
 								"Erro ao salvar no arquivo");
@@ -321,7 +322,7 @@ public class Janela extends JFrame {
 			else if (e.getSource().equals(itemSalvar)) {
 				File file = projetoAtual.getArquivoProjeto();
 				try {
-					salvarDados(file, SALVAR);
+					ControladorArquivo.salvarDados(file, SALVAR, projetoAtual);
 				} catch (IOException ex) {
 					JOptionPane.showMessageDialog(Janela.this,
 							"Erro ao salvar no arquivo");
@@ -334,7 +335,7 @@ public class Janela extends JFrame {
 				if (returnVa == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					try {
-						carregaDados(file);
+						ControladorArquivo.carregaDados(file, Janela.this);
 						JOptionPane.showMessageDialog(Janela.this,
 								"Arquivo carregado com sucesso!");
 					} catch (Exception exc) {
@@ -348,7 +349,7 @@ public class Janela extends JFrame {
 			// Opcao exportar imagem
 			else if (e.getSource().equals(itemExportarImagem)) {
 				if (projetoAtual.getFluxogramas() != null) {
-					exportaImagem();
+					ControladorArquivo.exportaImagem(painelFluxograma,Janela.this);
 				} else {
 					JOptionPane.showMessageDialog(Janela.this,
 							"Nenhum fluxograma para ser exportado!");
@@ -534,61 +535,7 @@ public class Janela extends JFrame {
 			}
 		}
 	}// end MenuPopUp
-
-	public void carregaDados(File file) throws FileNotFoundException,
-			IOException, ClassNotFoundException {
-		try {
-			FileInputStream fis = new FileInputStream(file);
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			projetoAtual = (Projeto) ois.readObject();
-			alimentaListaFluxogramas(projetoAtual.getFluxogramas());
-			defineTitulo(projetoAtual.getNomeProjeto());
-			ois.close();
-			fis.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void salvarDados(File file, int operacao)
-			throws FileNotFoundException, IOException {
-		try {
-			if (operacao == SALVARCOMO) {
-				projetoAtual.setArquivoProjeto(file);
-			}
-			FileOutputStream fos = new FileOutputStream(file);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.reset();
-			oos.writeObject(projetoAtual);
-			oos.close();
-			fos.close();
-			projetoAtual.setSalvo(true);
-		} catch (Exception e) {
-
-		}
-	}
-
-	public void exportaImagem() {
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		int returnVal = fileChooser.showSaveDialog(Janela.this);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = fileChooser.getSelectedFile();
-			file.renameTo(new File(file.getName() + ".jpg"));
-			BufferedImage im = new BufferedImage(painelFluxograma.getWidth(),
-					painelFluxograma.getHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2 = im.createGraphics();
-			painelFluxograma.paint(g2);
-			g2.dispose();
-			try {
-				ImageIO.write(im, "jpg", file);
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(Janela.this,
-						"Erro ao exportar imagem!");
-			}
-		}
-	}
-
+	
 	public void alimentaListaFluxogramas(ArrayList<Fluxograma> fluxogramas) {
 		for (Fluxograma f : fluxogramas) {
 			lP.addElement(f.getNomeFluxograma());
