@@ -59,7 +59,7 @@ public class Janela extends JFrame {
 	private JMenu menuArquivo, subMenuArquivo, menuFerramentas;
 	private JMenuItem itemSalvar, itemSalvarComo, itemAbrir, itemNovoProjeto,
 			itemNovoFluxograma, itemExportarImagem, itemExcluir,
-			itemVerificaConsistencia, itemFechar;
+			itemFechar;
 	private JPopupMenu menuPopup;
 
 	// Toolbar e botoes
@@ -172,20 +172,20 @@ public class Janela extends JFrame {
 				KeyEvent.CTRL_MASK));
 		itemExportarImagem.setEnabled(false);
 
-		itemVerificaConsistencia = new JMenuItem(
+		/*itemVerificaConsistencia = new JMenuItem(
 				"Verifica Consistência do Fluxograma");
 		itemVerificaConsistencia.addActionListener(new tratadorMenu());
 		itemVerificaConsistencia.setMnemonic(KeyEvent.VK_V);
 		itemVerificaConsistencia.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_V, KeyEvent.CTRL_MASK));
-		itemVerificaConsistencia.setEnabled(false);
+		itemVerificaConsistencia.setEnabled(false);*/
 
 		menuBar.add(menuArquivo);
 		menuBar.add(menuFerramentas);
 		menuArquivo.add(subMenuArquivo);
 		menuFerramentas.add(itemExportarImagem);
 		menuFerramentas.addSeparator();
-		menuFerramentas.add(itemVerificaConsistencia);
+		//menuFerramentas.add(itemVerificaConsistencia);
 		subMenuArquivo.add(itemNovoProjeto);
 		subMenuArquivo.add(itemNovoFluxograma);
 
@@ -296,7 +296,7 @@ public class Janela extends JFrame {
 			else if (e.getSource().equals(itemNovoFluxograma)) {
 				if (projetoAtual != null) {
 					HelperFluxograma.adicionaFluxograma(Janela.this, painelFluxograma);
-					HelperFluxograma.habilitaFuncoesFluxograma(itemExportarImagem, itemVerificaConsistencia);
+					HelperFluxograma.habilitaFuncoesFluxograma(itemExportarImagem);
 				} else {
 					JOptionPane.showMessageDialog(Janela.this,
 							"Crie um novo projeto!");

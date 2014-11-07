@@ -38,14 +38,14 @@ public class HelperFluxograma {
 				"Digite o nome do processo:");
 	}
 	
-	public static void habilitaFuncoesFluxograma(JMenuItem itemExportarImagem, JMenuItem itemVerificaConsistencia){
+	public static void habilitaFuncoesFluxograma(JMenuItem itemExportarImagem){
 		itemExportarImagem.setEnabled(true);
-		itemVerificaConsistencia.setEnabled(true);
+		//itemVerificaConsistencia.setEnabled(true);
 	}
 	
-	public void desabilitaFuncoesFluxograma(JMenuItem itemExportarImagem, JMenuItem itemVerificaConsistencia){
+	public void desabilitaFuncoesFluxograma(JMenuItem itemExportarImagem){
 		itemExportarImagem.setEnabled(false);
-		itemVerificaConsistencia.setEnabled(false);
+		//itemVerificaConsistencia.setEnabled(false);
 	}
 	
 }
